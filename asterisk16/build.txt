@@ -1,0 +1,1 @@
+docker build -t asterisk18:slim  --build-arg http_proxy=http://10.196.222.226:8080 --build-arg https_proxy=http://10.196.222.226:8080 .

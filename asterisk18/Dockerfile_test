@@ -1,0 +1,35 @@
+FROM debian:buster
+
+WORKDIR /usr/local/src
+
+COPY asterisk-18.14.0.tar.gz ./
+RUN  tar -xzf asterisk-18.14.0.tar.gz 
+WORKDIR asterisk-18.14.0
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y procps && apt-get install -y gcc \
+    g++ \
+    git \
+    patch \
+    libedit-dev \
+    curl \
+    wget \
+    make \
+    libnewt-dev \
+    libssl-dev \
+    libncurses5-dev \
+    subversion  \
+    sqlite3 \
+    libsqlite3-dev \
+    build-essential \
+    libjansson-dev \
+    libxml2-dev  \
+    uuid-dev  rsync net-tools vim \
+    odbcinst1debian2 libodbc1 odbcinst unixodbc libsqliteodbc odbc-postgresql && \
+    ./contrib/scripts/install_prereq install && rm -rf /var/lib/apt/lists/* && \
+    ./configure --with-jansson-bundled && \
+    make menuselect.makeopts && \
+	menuselect/menuselect --disable BUILD_NATIVE --enable CORE-SOUNDS-EN-ALAW menuselect.makeopts && \
+    make && make all && make install &&\
+    make samples &&\
+    make config ;
+
